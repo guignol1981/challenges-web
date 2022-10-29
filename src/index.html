@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link href="output.css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+        <title>Challenges web</title>
+    </head>
+    <body>
+        <div class="relative min-h-screen bg-gray-100">
+            <canvas
+                id="boardCanvas"
+                height="500"
+                width="500"
+                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ring-2 ring-gray-600"
+            ></canvas>
+            <canvas
+                id="piecesCanvas"
+                height="500"
+                width="500"
+                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ring-2 ring-gray-600"
+            ></canvas>
+            <canvas
+                id="hudCanvas"
+                height="500"
+                width="500"
+                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ring-2 ring-gray-600"
+            ></canvas>
+        </div>
+
+        <script type="module" src="index.js"></script>
+    </body>
+</html>
