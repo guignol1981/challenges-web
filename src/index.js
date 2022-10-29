@@ -100,12 +100,15 @@ addEventListener('click', (event) => {
     );
 
     if (moveTo) {
-        chessGame.selectedPiece.setPosWithBoardPos(mouseBoardPos);
-        chessGame.selectedPiece = null;
+        chessGame.movePiece(moveTo);
         return;
     }
 
     const selectedPiece = chessGame.getPieceAtBoardPos(mouseBoardPos);
+
+    if (selectedPiece && selectedPiece.color !== chessGame.turn) {
+        return;
+    }
 
     chessGame.selectedPiece = selectedPiece ?? null;
 });
