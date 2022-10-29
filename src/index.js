@@ -56,13 +56,23 @@ const drawPieces = (ctx) => {
 
 const drawHud = (ctx) => {
     if (chessGame.selectedPiece) {
-        ctx.fillStyle = 'red';
+        ctx.fillStyle = '#1893d76e';
         ctx.fillRect(
             chessGame.selectedPiece.toBoardPos.x * SQUARE_SIZE,
             chessGame.selectedPiece.toBoardPos.y * SQUARE_SIZE,
             SQUARE_SIZE,
             SQUARE_SIZE
         );
+
+        ctx.fillStyle = '#22cd3791';
+        chessGame.allowedMoves.forEach((am) => {
+            ctx.fillRect(
+                am.x * SQUARE_SIZE,
+                am.y * SQUARE_SIZE,
+                SQUARE_SIZE,
+                SQUARE_SIZE
+            );
+        });
     }
 };
 
