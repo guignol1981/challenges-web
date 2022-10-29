@@ -1,6 +1,4 @@
 export class Piece {
-    selected = false;
-
     constructor(type, color, pos) {
         this.type = type;
         this.color = color;

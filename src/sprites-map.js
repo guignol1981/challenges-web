@@ -37,3 +37,15 @@ export const piecesSprites = [
     { type: 'q', color: 'black', file: 'queen-black.png', sprite: new Image() },
     { type: 'K', color: 'black', file: 'king-black.png', sprite: new Image() },
 ];
+
+export const loadSprites = () => {
+    return Promise.all(
+        piecesSprites.map(
+            (ps) =>
+                new Promise((res) => {
+                    ps.sprite.onload = () => res();
+                    ps.sprite.src = `./sprites/${ps.file}`;
+                })
+        )
+    );
+};

@@ -1,15 +1,14 @@
-import { Chess } from './chess.js';
-import { piecesSprites } from './sprites-map.js';
+import { ChessGame } from './chess.js';
+import { cursorPosToBoardPos } from './pointer-utils.js';
+import { loadSprites, piecesSprites } from './sprites-map.js';
 const boardCanvas = document.getElementById('boardCanvas');
 const piecesCanvas = document.getElementById('piecesCanvas');
 const hudCanvas = document.getElementById('hudCanvas');
 
 const SQUARE_SIZE = boardCanvas.width / 8;
-const sprites = { white: {}, black: {} };
-const chessGame = new Chess();
+const chessGame = new ChessGame();
 
-const drawBoard = () => {
-    const ctx = boardCanvas.getContext('2d');
+const drawBoard = (ctx) => {
     for (let i = 0; i < 8; i++) {
         for (let j = 0; j < 8; j++) {
             if (j % 2) {
@@ -36,9 +35,7 @@ const drawBoard = () => {
     }
 };
 
-const drawPieces = () => {
-    const ctx = piecesCanvas.getContext('2d');
-
+const drawPieces = (ctx) => {
     chessGame.pieces.forEach((piece) => {
         const { sprite } = piecesSprites.find(
             (ps) => ps.type === piece.type && ps.color === piece.color
@@ -57,53 +54,55 @@ const drawPieces = () => {
     });
 };
 
-const loadSprites = () => {
-    return Promise.all(
-        piecesSprites.map(
-            (ps) =>
-                new Promise((res) => {
-                    ps.sprite.onload = () => res();
-                    ps.sprite.src = `./sprites/${ps.file}`;
-                })
-        )
-    );
+const drawHud = (ctx) => {
+    if (chessGame.selectedPiece) {
+        ctx.fillStyle = 'red';
+        ctx.fillRect(
+            chessGame.selectedPiece.toBoardPos.x * SQUARE_SIZE,
+            chessGame.selectedPiece.toBoardPos.y * SQUARE_SIZE,
+            SQUARE_SIZE,
+            SQUARE_SIZE
+        );
+    }
 };
 
 const draw = () => {
-    drawBoard();
-    drawPieces();
-};
+    const boardCtx = boardCanvas.getContext('2d');
+    const piecesCtx = piecesCanvas.getContext('2d');
+    const hudCtx = hudCanvas.getContext('2d');
 
-const start = async () => {
-    await loadSprites();
-    draw();
-};
+    [boardCtx, piecesCtx, hudCtx].forEach((ctx) =>
+        ctx.clearRect(0, 0, boardCanvas.width, boardCanvas.height)
+    );
 
-start();
-
-const cursorPosToBoardPos = (event) => {
-    const rect = boardCanvas.getBoundingClientRect();
-
-    let x = event.clientX - rect.left;
-    let y = event.clientY - rect.top;
-
-    if (x < 0 || y < 0 || x > boardCanvas.width || y > boardCanvas.height)
-        return;
-
-    x = Math.floor(x / SQUARE_SIZE);
-    y = Math.floor(y / SQUARE_SIZE);
-
-    return { x, y };
+    drawBoard(boardCtx);
+    drawPieces(piecesCtx);
+    drawHud(hudCtx);
 };
 
 addEventListener('click', (event) => {
-    const mouseBoardPos = cursorPosToBoardPos(event);
+    const mouseBoardPos = cursorPosToBoardPos(event, SQUARE_SIZE);
 
     if (!mouseBoardPos) return;
 
     const selectedPiece = chessGame.getPieceAtBoardPos(mouseBoardPos);
 
-    if (selectedPiece) {
-        selectedPiece.selected = !selectedPiece.selected;
-    }
+    if (!selectedPiece) return;
+
+    chessGame.selectedPiece = selectedPiece;
 });
+
+const update = () => {};
+
+const gameloop = () => {
+    draw();
+    update();
+    requestAnimationFrame(gameloop);
+};
+
+const start = async () => {
+    await loadSprites();
+    gameloop();
+};
+
+start();
