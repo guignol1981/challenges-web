@@ -1,8 +1,9 @@
 export class Piece {
-    constructor(type, color, pos) {
+    constructor(type, color, pos, moves) {
         this.type = type;
         this.color = color;
         this.pos = pos;
+        this.moves = moves;
     }
 
     get toBoardPos() {

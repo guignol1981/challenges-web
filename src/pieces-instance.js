@@ -1,14 +1,15 @@
+import { pawnMovements } from './movements/pawn.js';
 import { Piece } from './piece.js';
 
 export const piecesInstances = [
-    new Piece('p', 'white', ['A', 2]),
-    new Piece('p', 'white', ['B', 2]),
-    new Piece('p', 'white', ['C', 2]),
-    new Piece('p', 'white', ['D', 2]),
-    new Piece('p', 'white', ['E', 2]),
-    new Piece('p', 'white', ['F', 2]),
-    new Piece('p', 'white', ['G', 2]),
-    new Piece('p', 'white', ['H', 2]),
+    new Piece('p', 'white', ['A', 2], pawnMovements),
+    new Piece('p', 'white', ['B', 2], pawnMovements),
+    new Piece('p', 'white', ['C', 2], pawnMovements),
+    new Piece('p', 'white', ['D', 2], pawnMovements),
+    new Piece('p', 'white', ['E', 2], pawnMovements),
+    new Piece('p', 'white', ['F', 2], pawnMovements),
+    new Piece('p', 'white', ['G', 2], pawnMovements),
+    new Piece('p', 'white', ['H', 2], pawnMovements),
     new Piece('r', 'white', ['A', 1]),
     new Piece('k', 'white', ['B', 1]),
     new Piece('b', 'white', ['C', 1]),

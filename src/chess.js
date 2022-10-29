@@ -23,26 +23,36 @@ export class ChessGame {
     }
 
     get allowedMoves() {
-        if (!this.selectedPiece) return [];
-
-        switch (this.selectedPiece.type) {
-            case 'p':
-                return pawnMovements(this);
-            case 'r':
-                return rookMovements(this);
-            case 'k':
-                return knightMovements(this);
-            case 'b':
-                return bishopMovements(this);
-            case 'q':
-                return queenMovements(this);
-            case 'K':
-                return kingMovements(this);
-        }
+        return this.selectedPiece?.moves(this) ?? [];
     }
 
     playTurn() {
         this.turn = this.turn === 'white' ? 'black' : 'white';
+        this.verifyMate();
+    }
+
+    verifyMate() {
+        const allOppenentMoves = this.pieces
+            .filter((p) => p.color !== this.turn)
+            .map((p) => {
+                switch (p.type) {
+                    case 'p':
+                        return pawnMovements(this);
+                    case 'r':
+                        return rookMovements(this);
+                    case 'k':
+                        return knightMovements(this);
+                    case 'b':
+                        return bishopMovements(this);
+                    case 'q':
+                        return queenMovements(this);
+                    case 'K':
+                        return kingMovements(this);
+                }
+            })
+            .flat();
+
+        console.log(allOppenentMoves);
     }
 
     movePiece(move) {
