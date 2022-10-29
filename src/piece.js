@@ -11,4 +11,10 @@ export class Piece {
             y: 8 - this.pos[1],
         };
     }
+
+    setPosWithBoardPos(boardPos) {
+        this.pos = ['ABCDEFGH'.split('')[boardPos.x], 8 - boardPos.y];
+        console.log(boardPos);
+        console.log(this.pos);
+    }
 }

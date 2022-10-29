@@ -95,16 +95,33 @@ addEventListener('click', (event) => {
 
     if (!mouseBoardPos) return;
 
+    const moveTo = chessGame.allowedMoves.find(
+        (am) => am.x === mouseBoardPos.x && am.y === mouseBoardPos.y
+    );
+
+    if (moveTo) {
+        chessGame.selectedPiece.setPosWithBoardPos(mouseBoardPos);
+        chessGame.selectedPiece = null;
+        return;
+    }
+
     const selectedPiece = chessGame.getPieceAtBoardPos(mouseBoardPos);
 
-    if (!selectedPiece) return;
-
-    chessGame.selectedPiece = selectedPiece;
+    chessGame.selectedPiece = selectedPiece ?? null;
 });
 
 const update = () => {};
 
-const gameloop = () => {
+let oldTimeStamp = 0;
+const gameloop = (timeStamp) => {
+    // let deltatime = (timeStamp - oldTimeStamp) / 1000;
+
+    // oldTimeStamp = timeStamp;
+
+    // let fps = Math.round(1 / deltatime);
+
+    // console.log(fps);
+
     draw();
     update();
     requestAnimationFrame(gameloop);
