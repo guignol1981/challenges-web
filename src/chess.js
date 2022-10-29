@@ -1,10 +1,4 @@
-import { bishopMovements } from './movements/bishop.js';
-import { kingMovements } from './movements/king.js';
-import { knightMovements } from './movements/knight.js';
-import { pawnMovements } from './movements/pawn.js';
-import { queenMovements } from './movements/queen.js';
-import { rookMovements } from './movements/rook.js';
-import { Piece } from './piece.js';
+import { Piece } from './pieces/piece.js';
 import { piecesInstances } from './pieces-instance.js';
 
 export class ChessGame {
@@ -22,8 +16,8 @@ export class ChessGame {
         this.#_selectedPiece = value;
     }
 
-    get allowedMoves() {
-        return this.selectedPiece?.moves(this) ?? [];
+    get possibleMoves() {
+        return this.selectedPiece?.possibleMoves(this) ?? [];
     }
 
     playTurn() {
@@ -34,22 +28,7 @@ export class ChessGame {
     verifyMate() {
         const allOppenentMoves = this.pieces
             .filter((p) => p.color !== this.turn)
-            .map((p) => {
-                switch (p.type) {
-                    case 'p':
-                        return pawnMovements(this);
-                    case 'r':
-                        return rookMovements(this);
-                    case 'k':
-                        return knightMovements(this);
-                    case 'b':
-                        return bishopMovements(this);
-                    case 'q':
-                        return queenMovements(this);
-                    case 'K':
-                        return kingMovements(this);
-                }
-            })
+            .map((p) => p.possibleMoves(this))
             .flat();
 
         console.log(allOppenentMoves);

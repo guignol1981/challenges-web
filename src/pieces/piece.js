@@ -1,6 +1,6 @@
 export class Piece {
-    constructor(type, color, pos, moves) {
-        this.type = type;
+    type;
+    constructor(color, pos, moves) {
         this.color = color;
         this.pos = pos;
         this.moves = moves;
@@ -16,4 +16,6 @@ export class Piece {
     setPosWithBoardPos(boardPos) {
         this.pos = ['ABCDEFGH'.split('')[boardPos.x], 8 - boardPos.y];
     }
+
+    possibleMoves() {}
 }

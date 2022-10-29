@@ -65,7 +65,7 @@ const drawHud = (ctx) => {
         );
 
         ctx.fillStyle = '#22cd3791';
-        chessGame.allowedMoves.forEach((am) => {
+        chessGame.possibleMoves.forEach((am) => {
             ctx.fillRect(
                 am.x * SQUARE_SIZE,
                 am.y * SQUARE_SIZE,
@@ -95,7 +95,7 @@ addEventListener('click', (event) => {
 
     if (!mouseBoardPos) return;
 
-    const moveTo = chessGame.allowedMoves.find(
+    const moveTo = chessGame.possibleMoves.find(
         (am) => am.x === mouseBoardPos.x && am.y === mouseBoardPos.y
     );
 
