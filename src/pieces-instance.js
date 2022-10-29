@@ -12,7 +12,7 @@ export const piecesInstances = [
     new Piece('p', 'white', ['H', 2]),
     new Piece('r', 'white', ['D', 5]),
     new Piece('k', 'white', ['B', 1]),
-    new Piece('b', 'white', ['C', 1]),
+    new Piece('b', 'white', ['D', 4]),
     new Piece('q', 'white', ['D', 1]),
     new Piece('K', 'white', ['E', 1]),
     new Piece('b', 'white', ['F', 1]),

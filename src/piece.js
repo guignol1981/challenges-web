@@ -14,7 +14,5 @@ export class Piece {
 
     setPosWithBoardPos(boardPos) {
         this.pos = ['ABCDEFGH'.split('')[boardPos.x], 8 - boardPos.y];
-        console.log(boardPos);
-        console.log(this.pos);
     }
 }
