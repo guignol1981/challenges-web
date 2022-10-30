@@ -47,6 +47,7 @@ export class Queen extends Piece {
             }
         }
 
+        pos = { ...this.toBoardPos };
         obstacle = false;
         while (pos.y > 0 && pos.x > 0 && !obstacle) {
             pos.y--;
@@ -91,6 +92,7 @@ export class Queen extends Piece {
                 possibleMoves.push({ ...pos });
             }
         }
+
         return possibleMoves;
     }
 }

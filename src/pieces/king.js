@@ -47,6 +47,7 @@ export class King extends Piece {
             }
         }
 
+        pos = { ...this.toBoardPos };
         obstacle = false;
         while (pos.y > 0 && pos.x > 0 && !obstacle) {
             pos.y--;
@@ -83,7 +84,6 @@ export class King extends Piece {
 
         pos = { ...this.toBoardPos };
         obstacle = false;
-
         while (pos.x > 0 && pos.y < 8 && !obstacle) {
             pos.x--;
             pos.y++;

@@ -22,20 +22,53 @@ export class ChessGame {
 
     playTurn() {
         this.turn = this.turn === 'white' ? 'black' : 'white';
-        this.verifyMate();
+        if (this.verifyMate()) {
+            alert(this.turn, ' mate!');
+        }
     }
 
-    verifyMate() {
-        const allOppenentMoves = this.pieces
+    verifyCheck(pieces) {
+        const allOppenentMoves = pieces
             .filter((p) => p.color !== this.turn)
             .map((p) => p.possibleMoves(this))
             .flat();
 
-        console.log(allOppenentMoves);
+        const king = pieces.find(
+            (p) => p.type === 'K' && p.color === this.turn
+        );
+
+        const check = !!allOppenentMoves.some(
+            (om) => om.x === king.toBoardPos.x && om.y == king.toBoardPos.y
+        );
+
+        return check;
+    }
+
+    verifyMate() {
+        const turnPieces = this.pieces.filter((p) => p.color === this.turn);
+
+        const mate = turnPieces.every((piece) => {
+            piece.possibleMoves(this).every((move) => {
+                const piecesCopy = [...this.pieces];
+
+                if (this.getPieceAtBoardPos(move)) {
+                    piecesCopy = piecesCopy.filter(
+                        (piece) => piece !== this.getPieceAtBoardPos(move)
+                    );
+                }
+
+                return this.verifyCheck(piecesCopy);
+            });
+        });
+
+        return mate;
     }
 
     movePiece(move) {
         if (this.selectedPiece.color !== this.turn) return;
+
+        const piecesCopy = [...this.pieces];
+        const selectedPiecePos = this.selectedPiece.pos;
 
         if (this.getPieceAtBoardPos(move)) {
             this.pieces = this.pieces.filter(
@@ -44,6 +77,7 @@ export class ChessGame {
         }
 
         this.selectedPiece.setPosWithBoardPos(move);
+
         if (
             this.selectedPiece.type === 'p' &&
             (this.selectedPiece.pos[1] === 8 || this.selectedPiece.pos[1] === 1)
@@ -55,8 +89,14 @@ export class ChessGame {
             );
         }
 
-        this.selectedPiece = null;
-        this.playTurn();
+        if (this.verifyCheck(this.pieces)) {
+            this.pieces = piecesCopy;
+            this.selectedPiece.pos = selectedPiecePos;
+            this.selectedPiece = null;
+        } else {
+            this.selectedPiece = null;
+            this.playTurn();
+        }
     }
 
     getPieceAtBoardPos(pos) {
