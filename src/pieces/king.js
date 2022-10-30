@@ -7,6 +7,7 @@ export class King extends Piece {
         const possibleMoves = [];
         let pos = { ...this.toBoardPos };
         let obstacle = false;
+
         while (pos.y > 0 && !obstacle) {
             pos.y--;
             obstacle = chessGame.getPieceAtBoardPos(pos);

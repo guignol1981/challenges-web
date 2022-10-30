@@ -20,20 +20,26 @@ export class ChessGame {
         return this.selectedPiece?.possibleMoves(this) ?? [];
     }
 
+    reset() {
+        this.pieces = piecesInstances;
+        this.turn = white;
+    }
+
     playTurn() {
         this.turn = this.turn === 'white' ? 'black' : 'white';
         if (this.verifyMate()) {
-            alert(this.turn, ' mate!');
+            alert(this.turn === 'white' ? 'black win' : 'white win');
+            this.reset();
         }
     }
 
-    verifyCheck(pieces) {
-        const allOppenentMoves = pieces
+    verifyCheck() {
+        const allOppenentMoves = this.pieces
             .filter((p) => p.color !== this.turn)
             .map((p) => p.possibleMoves(this))
             .flat();
 
-        const king = pieces.find(
+        const king = this.pieces.find(
             (p) => p.type === 'K' && p.color === this.turn
         );
 
@@ -45,22 +51,41 @@ export class ChessGame {
     }
 
     verifyMate() {
+        const piecesCopy = [...this.pieces].map((p) =>
+            Object.assign(Object.create(Object.getPrototypeOf(p)), p)
+        );
+
         const turnPieces = this.pieces.filter((p) => p.color === this.turn);
 
         const mate = turnPieces.every((piece) => {
-            piece.possibleMoves(this).every((move) => {
-                const piecesCopy = [...this.pieces];
+            const pieceCopy = Object.assign(
+                Object.create(Object.getPrototypeOf(piece)),
+                piece
+            );
 
-                if (this.getPieceAtBoardPos(move)) {
-                    piecesCopy = piecesCopy.filter(
-                        (piece) => piece !== this.getPieceAtBoardPos(move)
-                    );
+            return piece.possibleMoves(this).every((move) => {
+                piece.pos = pieceCopy.pos;
+
+                const target = this.getPieceAtBoardPos(move);
+
+                if (target) {
+                    this.pieces = this.pieces.filter((p) => p !== target);
                 }
 
-                return this.verifyCheck(piecesCopy);
+                piece.setPosWithBoardPos(move);
+
+                const check = this.verifyCheck();
+
+                if (target) this.pieces.push(target);
+
+                console.log(move, check);
+
+                return this.verifyCheck();
             });
         });
 
+        this.pieces = piecesCopy;
+        console.log(mate);
         return mate;
     }
 
@@ -89,7 +114,7 @@ export class ChessGame {
             );
         }
 
-        if (this.verifyCheck(this.pieces)) {
+        if (this.verifyCheck()) {
             this.pieces = piecesCopy;
             this.selectedPiece.pos = selectedPiecePos;
             this.selectedPiece = null;
