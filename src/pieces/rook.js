@@ -47,61 +47,6 @@ export class Rook extends Piece {
             }
         }
 
-        const king = chessGame.pieces.find(
-            (p) => p.color === this.color && p.type === 'K'
-        );
-        if (this.pristine && king.pristine) {
-            let canRock = true;
-            if (king.toBoardPos.x > this.toBoardPos.x) {
-                for (
-                    let index = 1;
-                    index < king.toBoardPos.x - this.toBoardPos.x;
-                    index++
-                ) {
-                    if (
-                        chessGame.getPieceAtBoardPos({
-                            x: this.toBoardPos.x + index,
-                            y: this.toBoardPos.y,
-                        })
-                    ) {
-                        canRock = false;
-                        break;
-                    }
-                }
-
-                if (canRock) {
-                    possibleMoves.push({
-                        x: 3,
-                        y: this.toBoardPos.y,
-                        rock: true,
-                    });
-                }
-            } else {
-                for (
-                    let index = 1;
-                    index < this.toBoardPos.x - king.toBoardPos.x;
-                    index++
-                ) {
-                    if (
-                        chessGame.getPieceAtBoardPos({
-                            x: this.toBoardPos.x - index,
-                            y: this.toBoardPos.y,
-                        })
-                    ) {
-                        canRock = false;
-                        break;
-                    }
-                }
-                if (canRock) {
-                    possibleMoves.push({
-                        x: 5,
-                        y: this.toBoardPos.y,
-                        rock: true,
-                    });
-                }
-            }
-        }
-
         return possibleMoves;
     }
 }

@@ -94,14 +94,60 @@ export class King extends Piece {
             }
         }
 
+        const leftPristineRook = chessGame.pieces.find(
+            (p) =>
+                p.color === this.color &&
+                p.type === 'r' &&
+                p.pristine &&
+                p.toBoardPos.x < this.toBoardPos.x
+        );
+        const rightPristineRook = chessGame.pieces.find(
+            (p) =>
+                p.color === this.color &&
+                p.type === 'r' &&
+                p.pristine &&
+                p.toBoardPos.x > this.toBoardPos.x
+        );
+        if (
+            leftPristineRook &&
+            this.pristine &&
+            [
+                { x: this.toBoardPos.x - 1, y: this.toBoardPos.y },
+                { x: this.toBoardPos.x - 2, y: this.toBoardPos.y },
+                { x: this.toBoardPos.x - 3, y: this.toBoardPos.y },
+            ].every((pos) => !chessGame.getPieceAtBoardPos(pos))
+        ) {
+            possibleMoves.push({
+                x: this.toBoardPos.x - 2,
+                y: this.toBoardPos.y,
+                rock: true,
+            });
+        }
+
+        if (
+            rightPristineRook &&
+            this.pristine &&
+            [
+                { x: this.toBoardPos.x + 1, y: this.toBoardPos.y },
+                { x: this.toBoardPos.x + 2, y: this.toBoardPos.y },
+            ].every((pos) => !chessGame.getPieceAtBoardPos(pos))
+        ) {
+            possibleMoves.push({
+                x: this.toBoardPos.x + 2,
+                y: this.toBoardPos.y,
+                rock: true,
+            });
+        }
+
         return possibleMoves.filter(
             (m) =>
-                Math.max(m.x, this.toBoardPos.x) -
+                m.rock ||
+                (Math.max(m.x, this.toBoardPos.x) -
                     Math.min(m.x, this.toBoardPos.x) <=
                     1 &&
-                Math.max(m.y, this.toBoardPos.y) -
-                    Math.min(m.y, this.toBoardPos.y) <=
-                    1
+                    Math.max(m.y, this.toBoardPos.y) -
+                        Math.min(m.y, this.toBoardPos.y) <=
+                        1)
         );
     }
 }

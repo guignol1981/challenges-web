@@ -22,7 +22,7 @@ export class ChessGame {
 
     reset() {
         this.pieces = piecesInstances;
-        this.turn = white;
+        this.turn = 'white';
     }
 
     playTurn() {
@@ -89,6 +89,7 @@ export class ChessGame {
 
     movePiece(move) {
         if (this.selectedPiece.color !== this.turn) return;
+        console.log(move);
 
         const piecesCopy = [...this.pieces];
         const selectedPiecePos = this.selectedPiece.pos;
@@ -112,9 +113,32 @@ export class ChessGame {
             );
         }
 
+        let rook;
+        let rookPos;
+
+        if (move.rock) {
+            rook = this.getPieceAtBoardPos({
+                x: move.x === 2 ? 0 : 7,
+                y: this.selectedPiece.color === 'white' ? 7 : 0,
+            });
+
+            rookPos = rook.pos;
+
+            rook.move({
+                x: move.x === 2 ? 3 : 5,
+                y: this.selectedPiece.color === 'white' ? 7 : 0,
+            });
+        }
+
         if (this.verifyCheck()) {
             this.pieces = piecesCopy;
             this.selectedPiece.pos = selectedPiecePos;
+            this.selectedPiece.pristine = true;
+
+            if (move.rock) {
+                rook.pristine = true;
+                rook.pos = rookPos;
+            }
             this.selectedPiece = null;
         } else {
             this.selectedPiece = null;
