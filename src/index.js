@@ -64,8 +64,12 @@ const drawHud = (ctx) => {
             SQUARE_SIZE
         );
 
-        ctx.fillStyle = '#22cd3791';
         chessGame.possibleMoves.forEach((am) => {
+            if (am.rock) {
+                ctx.fillStyle = 'red';
+            } else {
+                ctx.fillStyle = '#22cd3791';
+            }
             ctx.fillRect(
                 am.x * SQUARE_SIZE,
                 am.y * SQUARE_SIZE,

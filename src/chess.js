@@ -72,20 +72,18 @@ export class ChessGame {
                     this.pieces = this.pieces.filter((p) => p !== target);
                 }
 
-                piece.setPosWithBoardPos(move);
+                piece.move(move);
 
                 const check = this.verifyCheck();
 
                 if (target) this.pieces.push(target);
 
-                console.log(move, check);
-
-                return this.verifyCheck();
+                return check;
             });
         });
 
         this.pieces = piecesCopy;
-        console.log(mate);
+
         return mate;
     }
 
@@ -101,7 +99,7 @@ export class ChessGame {
             );
         }
 
-        this.selectedPiece.setPosWithBoardPos(move);
+        this.selectedPiece.move(move);
 
         if (
             this.selectedPiece.type === 'p' &&

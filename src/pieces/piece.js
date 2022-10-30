@@ -3,6 +3,7 @@ export class Piece {
     constructor(color, pos) {
         this.color = color;
         this.pos = pos;
+        this.pristine = true;
     }
 
     get toBoardPos() {
@@ -12,7 +13,8 @@ export class Piece {
         };
     }
 
-    setPosWithBoardPos(boardPos) {
+    move(boardPos) {
+        this.pristine = false;
         this.pos = ['ABCDEFGH'.split('')[boardPos.x], 8 - boardPos.y];
     }
 
