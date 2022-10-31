@@ -93,6 +93,17 @@ export class ChessGame {
 
         const piecesCopy = [...this.pieces];
         const selectedPiecePos = this.selectedPiece.pos;
+        const rollBack = (rook, rookPos) => {
+            this.pieces = piecesCopy;
+            this.selectedPiece.pos = selectedPiecePos;
+            this.selectedPiece.pristine = true;
+
+            if (rook && rookPos) {
+                rook.pristine = true;
+                rook.pos = rookPos;
+            }
+            this.selectedPiece = null;
+        };
 
         if (this.getPieceAtBoardPos(move)) {
             this.pieces = this.pieces.filter(
@@ -100,7 +111,31 @@ export class ChessGame {
             );
         }
 
-        this.selectedPiece.move(move);
+        if (move.rock) {
+            if (move.x > this.selectedPiece.toBoardPos.x) {
+                while (this.selectedPiece.toBoardPos.x < move.x) {
+                    this.selectedPiece.move({
+                        x: this.selectedPiece.toBoardPos.x + 1,
+                        y: this.selectedPiece.toBoardPos.y,
+                    });
+                    if (this.verifyCheck()) {
+                        break;
+                    }
+                }
+            } else {
+                while (this.selectedPiece.toBoardPos.x > move.x) {
+                    this.selectedPiece.move({
+                        x: this.selectedPiece.toBoardPos.x - 1,
+                        y: this.selectedPiece.toBoardPos.y,
+                    });
+                    if (this.verifyCheck()) {
+                        break;
+                    }
+                }
+            }
+        } else {
+            this.selectedPiece.move(move);
+        }
 
         if (
             this.selectedPiece.type === 'p' &&
@@ -131,15 +166,7 @@ export class ChessGame {
         }
 
         if (this.verifyCheck()) {
-            this.pieces = piecesCopy;
-            this.selectedPiece.pos = selectedPiecePos;
-            this.selectedPiece.pristine = true;
-
-            if (move.rock) {
-                rook.pristine = true;
-                rook.pos = rookPos;
-            }
-            this.selectedPiece = null;
+            rollBack(rook, rookPos);
         } else {
             this.selectedPiece = null;
             this.playTurn();
