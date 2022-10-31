@@ -1,14 +1,13 @@
 import { ChessGame } from './chess.js';
 import { cursorPosToBoardPos } from './pointer-utils.js';
 import { loadSprites, piecesSprites } from './sprites-map.js';
-const boardCanvas = document.getElementById('boardCanvas');
-const piecesCanvas = document.getElementById('piecesCanvas');
-const hudCanvas = document.getElementById('hudCanvas');
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
 
-const SQUARE_SIZE = boardCanvas.width / 8;
+const SQUARE_SIZE = canvas.width / 8;
 const chessGame = new ChessGame();
 
-const drawBoard = (ctx) => {
+const drawBoard = () => {
     for (let i = 0; i < 8; i++) {
         for (let j = 0; j < 8; j++) {
             if (j % 2) {
@@ -35,7 +34,7 @@ const drawBoard = (ctx) => {
     }
 };
 
-const drawPieces = (ctx) => {
+const drawPieces = () => {
     chessGame.pieces.forEach((piece) => {
         const { sprite } = piecesSprites.find(
             (ps) => ps.type === piece.type && ps.color === piece.color
@@ -54,7 +53,7 @@ const drawPieces = (ctx) => {
     });
 };
 
-const drawHud = (ctx) => {
+const drawHud = () => {
     if (chessGame.selectedPiece) {
         ctx.fillStyle = '#1893d76e';
         ctx.fillRect(
@@ -81,21 +80,15 @@ const drawHud = (ctx) => {
 };
 
 const draw = () => {
-    const boardCtx = boardCanvas.getContext('2d');
-    const piecesCtx = piecesCanvas.getContext('2d');
-    const hudCtx = hudCanvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    [boardCtx, piecesCtx, hudCtx].forEach((ctx) =>
-        ctx.clearRect(0, 0, boardCanvas.width, boardCanvas.height)
-    );
-
-    drawBoard(boardCtx);
-    drawPieces(piecesCtx);
-    drawHud(hudCtx);
+    drawBoard();
+    drawPieces();
+    drawHud();
 };
 
 addEventListener('click', (event) => {
-    const mouseBoardPos = cursorPosToBoardPos(event, SQUARE_SIZE);
+    const mouseBoardPos = cursorPosToBoardPos(event, canvas);
 
     if (!mouseBoardPos) return;
 

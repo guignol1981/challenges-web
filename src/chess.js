@@ -5,15 +5,15 @@ export class ChessGame {
     pieces = piecesInstances;
     turn = 'white';
     winner = null;
-    movesHistory = [];
-    #_selectedPiece = null;
+    history = [];
+    #selectedPiece = null;
 
     get selectedPiece() {
-        return this.#_selectedPiece;
+        return this.#selectedPiece;
     }
 
     set selectedPiece(value) {
-        this.#_selectedPiece = value;
+        this.#selectedPiece = value;
     }
 
     get possibleMoves() {
@@ -168,9 +168,29 @@ export class ChessGame {
         if (this.verifyCheck()) {
             rollBack(rook, rookPos);
         } else {
+            this.addHistory(this.selectedPiece);
             this.selectedPiece = null;
             this.playTurn();
         }
+    }
+
+    addHistory(piece) {
+        this.history.push([
+            piece.color,
+            piece.type,
+            piece.pos[0],
+            piece.pos[1],
+        ]);
+        const historyElement = document.getElementById('history');
+        historyElement.innerHTML = '';
+
+        this.history.forEach((h) => {
+            const liElement = document.createElement('li');
+            liElement.innerText = `${
+                h[0]
+            }: ${h[1].toUpperCase()}${h[2].toLowerCase()}-${h[3]}`;
+            historyElement.appendChild(liElement);
+        });
     }
 
     getPieceAtBoardPos(pos) {

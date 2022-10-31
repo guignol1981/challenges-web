@@ -8,26 +8,17 @@
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
         <title>Challenges web</title>
     </head>
-    <body>
-        <div class="bg-gray-red relative min-h-screen">
+    <body class="p-12">
+        <div class="flex min-h-screen flex-col items-center">
             <canvas
-                id="boardCanvas"
+                class="shadow-md"
+                id="canvas"
                 height="500"
                 width="500"
-                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ring-2 ring-gray-600"
             ></canvas>
-            <canvas
-                id="piecesCanvas"
-                height="500"
-                width="500"
-                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ring-2 ring-gray-600"
-            ></canvas>
-            <canvas
-                id="hudCanvas"
-                height="500"
-                width="500"
-                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ring-2 ring-gray-600"
-            ></canvas>
+            <div class="mt-12 w-full bg-gray-300 p-8">
+                <ul id="history"></ul>
+            </div>
         </div>
 
         <script type="module" src="index.js"></script>
